@@ -1,6 +1,6 @@
 # AFrame Draw Shader
 
-A shader to use canvas as material mapping data. Inspired by [@maxkrieger](https://github.com/maxkrieger)'s [`draw`](https://github.com/maxkrieger/aframe-draw-component) component.
+A shader to draw canvas [A-Frame](https://aframe.io) VR. Inspired by [@maxkrieger](https://github.com/maxkrieger)'s [`draw`](https://github.com/maxkrieger/aframe-draw-component) component.
 
 **[DEMO](https://mayognaise.github.io/aframe-draw-shader/basic/index.html)**
 
@@ -20,20 +20,13 @@ A shader to use canvas as material mapping data. Inspired by [@maxkrieger](https
 
 For refference, please check the following links:
 - [Material](https://aframe.io/docs/components/material.html)
-- [Textures](https://aframe.io/docs/components/material.html#Textures)
 - [Flat Shading Model](https://aframe.io/docs/core/shaders.html#Flat-Shading-Model)
 
-[Aailable options](https://html2canvas.hertzen.com/documentation.html#available-options) by `html2canvas` will be ready for properties soon.
 
-## Method
-
-The following method is coming soon...
-
-- render() (This is useful when you set `fps` as `0`)
 
 ## Events
 
-- `draw-render` is called every framerate (fps). 
+- **`draw-render`** is called every framerate (fps). 
 
 `event.detail` includes canvas's `ctx` (context) and `texture`.
 `texture.needsUpdate = true` will call in the shader but
@@ -43,9 +36,19 @@ do `texture.needsUpdate = true` by yourself.
 ```js
 
 this.el.addEventListener('draw-render', function(event) {
+
   // draw!
-  // context: event.detail.ctx
-  // texture: event.detail.texture
+  var ctx = event.detail.ctx
+  var texture = event.detail.texture
+
+  // drawing...
+  ctx.rect(20,20,150,100)
+  ctx.stroke()
+  // still drawing...
+
+  // if finish draw later
+  texture.needsUpdate = true
+
 })
 
 ```
