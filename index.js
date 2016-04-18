@@ -216,7 +216,7 @@ AFRAME.registerShader('draw', {
       texture: this.__texture,
     })
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (!this.__texture) { return }
 
       /* texture upate */
@@ -225,7 +225,7 @@ AFRAME.registerShader('draw', {
       /* setup next tick */
       this.__setNextTick()
 
-    }, 3)
+    })
 
   },
 

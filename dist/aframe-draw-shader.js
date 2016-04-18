@@ -279,7 +279,7 @@
 	      texture: this.__texture
 	    });
 
-	    setTimeout(function () {
+	    requestAnimationFrame(function () {
 	      if (!_this.__texture) {
 	        return;
 	      }
@@ -289,7 +289,7 @@
 
 	      /* setup next tick */
 	      _this.__setNextTick();
-	    }, 3);
+	    });
 	  },
 
 
