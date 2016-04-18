@@ -9,13 +9,13 @@ A shader to draw canvas [A-Frame](https://aframe.io) VR. Inspired by [@maxkriege
 
 ## Properties
 
-- Basic material's properties are supported.
+- Basic `material`'s properties are supported.
 - The property is pretty much same as `flat` shader besides `repeat`.
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
-| width | canvas width | 256 (target's width) |
-| height | canvas height | 256 (target's height) |
+| width | canvas width | 256 |
+| height | canvas height | 256 |
 | fps | fps to render | 60 |
 
 For refference, please check the following links:
