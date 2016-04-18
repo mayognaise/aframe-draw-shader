@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+    <title>A-Frame Draw Shader - Basic</title>
+    <script src="../build.js"></script>
+    <script type="text/javascript">
+    /**
+     * noise component example
+     */
+    AFRAME.registerComponent('noise', {
+      dependencies: [ ],
+      schema: { },
+      init () {
+        this.el.addEventListener('draw-render', this.render.bind(this))
+      },
+      update (oldData) { },
+      remove () { },
+      pause () { },
+      play () { },
+      render (e) {
+        var ctx = e.detail.ctx,
+            w = ctx.canvas.width,
+            h = ctx.canvas.height,
+            idata = ctx.createImageData(w, h),
+            buffer32 = new Uint32Array(idata.data.buffer),
+            len = buffer32.length,
+            i = 0
+        for(; i < len;)
+            buffer32[i++] = ((255 * Math.random())|0) << 24
+        ctx.putImageData(idata, 0, 0)
+      }
+    })
+    </script>
+    <link rel="stylesheet" type="text/css" href="../common.css"/>
+  </head>
+  <body>
+    <a-scene vr-mode-ui>
+
+      <a-entity geometry="primitive:torus;width:2;height:2;depth:2;" material="shader:draw;width:256;height:256;fps:60;opacity:.8;" noise="" position="0 1.8 0">
+        <a-animation attribute="rotation" dur="20000" fill="forwards" to="360 360 360" easing="linear" repeat="indefinite"></a-animation>
+      </a-entity>
+
+      <!-- sky -->
+      <a-entity geometry="primitive:sphere;radius:5000;" scale="-1 1 1"></a-entity>
+      
+    </a-scene>
+
+    <div class="spacer"></div>
+    <div class="spacer2"></div>
+
+    <script src="../common.js"></script>
+
+  </body>
+</html>
+
