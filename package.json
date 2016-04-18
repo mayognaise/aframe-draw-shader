@@ -1,6 +1,6 @@
 {
   "name": "aframe-draw-shader",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A shader to draw canvas for A-Frame VR.",
   "main": "dist/aframe-draw-shader.js",
   "scripts": {
