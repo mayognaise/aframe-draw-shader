@@ -215,17 +215,9 @@ AFRAME.registerShader('draw', {
       ctx: this.__ctx,
       texture: this.__texture,
     })
-
-    requestAnimationFrame(() => {
-      if (!this.__texture) { return }
-
-      /* texture upate */
-      this.__texture.needsUpdate = true
-
-      /* setup next tick */
-      this.__setNextTick()
-
-    })
+    
+    /* setup next tick */
+    this.__setNextTick()
 
   },
 

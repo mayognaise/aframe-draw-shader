@@ -20,6 +20,7 @@
       play () { },
       render (e) {
         var ctx = e.detail.ctx,
+            texture = e.detail.texture,
             w = ctx.canvas.width,
             h = ctx.canvas.height,
             idata = ctx.createImageData(w, h),
@@ -29,6 +30,7 @@
         for(; i < len;)
             buffer32[i++] = ((255 * Math.random())|0) << 24
         ctx.putImageData(idata, 0, 0)
+        texture.needsUpdate = true
       }
     })
     </script>

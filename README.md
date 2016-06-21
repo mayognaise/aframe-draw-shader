@@ -29,9 +29,8 @@ For refference, please check the following links:
 - **`draw-render`** is called every framerate (fps). 
 
 `event.detail` includes canvas's `ctx` (context) and `texture`.
-`texture.needsUpdate = true` will call in the shader but
-if your process is later than 3 ms after the event fired,
-do `texture.needsUpdate = true` by yourself.
+`texture.needsUpdate = true` *won't be called in the shader*.
+Please do `texture.needsUpdate = true` by yourself.
 
 ```js
 
@@ -44,9 +43,8 @@ this.el.addEventListener('draw-render', function(event) {
   // drawing...
   ctx.rect(20,20,150,100)
   ctx.stroke()
-  // still drawing...
 
-  // if finish draw later
+  // texture upate
   texture.needsUpdate = true
 
 })
@@ -80,6 +78,7 @@ Install and use by directly including the [browser files](dist):
       play () { },
       render (e) {
         var ctx = e.detail.ctx,
+            texture = e.detail.texture,
             w = ctx.canvas.width,
             h = ctx.canvas.height,
             idata = ctx.createImageData(w, h),
@@ -89,6 +88,8 @@ Install and use by directly including the [browser files](dist):
         for(; i < len;)
             buffer32[i++] = ((255 * Math.random())|0) << 24
         ctx.putImageData(idata, 0, 0)
+        // texture upate
+        texture.needsUpdate = true
       }
     })
   </script>

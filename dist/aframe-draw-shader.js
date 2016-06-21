@@ -268,8 +268,6 @@
 	   * @private
 	   */
 	  __render: function __render() {
-	    var _this = this;
-
 	    log('render');
 	    this.__nextTime = null;
 
@@ -279,17 +277,8 @@
 	      texture: this.__texture
 	    });
 
-	    requestAnimationFrame(function () {
-	      if (!_this.__texture) {
-	        return;
-	      }
-
-	      /* texture upate */
-	      _this.__texture.needsUpdate = true;
-
-	      /* setup next tick */
-	      _this.__setNextTick();
-	    });
+	    /* setup next tick */
+	    this.__setNextTick();
 	  },
 
 
