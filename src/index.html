@@ -19,13 +19,23 @@
       AFRAME.registerComponent("noise", {
         dependencies: [],
         schema: {},
-        init() {
+        init(event) {
+          this.el.addEventListener("draw-ready", this.ready.bind(this));
           this.el.addEventListener("draw-render", this.render.bind(this));
+          this.el.addEventListener("click", () => {
+            console.log(this.togglePlayback);
+          });
         },
-        update(oldData) {},
-        remove() {},
-        pause() {},
+        ready({ detail: { play, pause, togglePlayback, paused } }) {
+          this.play = play;
+          this.pause = pause;
+          this.togglePlayback = togglePlayback;
+          this.paused = paused;
+        },
         play() {},
+        pause() {},
+        togglePlayback() {},
+        paused() {},
         render({
           detail: {
             canvas: { width, height },
@@ -48,6 +58,7 @@
         animation="property: rotation; to: 360 360 360; dur: 20000; easing: linear; loop: true"
         material="shader:draw;width:512;height:512;fps:15;opacity:.8;"
         noise=""
+        cursor
       >
       </a-torus>
       <a-sky color="pink"></a-sky>

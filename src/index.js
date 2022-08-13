@@ -69,6 +69,12 @@ AFRAME.registerShader("draw", {
       throw "Material is not set";
     }
 
+    const play = () => this.play();
+    const pause = () => this.pause();
+    const togglePlayback = () => this.togglePlayback();
+    const paused = () => this.paused();
+    this.el.emit("draw-ready", { play, pause, togglePlayback, paused });
+
     return this.material;
   },
 
@@ -79,7 +85,6 @@ AFRAME.registerShader("draw", {
    * @returns THREE.MeshBasicMaterial
    */
   update(schema) {
-    console.log("update", schema);
     this._updateMaterial(schema);
     this._updateTexture(schema);
     return this.material;
