@@ -69,12 +69,6 @@ AFRAME.registerShader("draw", {
       throw "Material is not set";
     }
 
-    const play = () => this.play();
-    const pause = () => this.pause();
-    const togglePlayback = () => this.togglePlayback();
-    const paused = () => this.paused();
-    this.el.emit("draw-ready", { play, pause, togglePlayback, paused });
-
     return this.material;
   },
 

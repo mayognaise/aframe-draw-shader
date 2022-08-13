@@ -20,22 +20,17 @@
         dependencies: [],
         schema: {},
         init(event) {
-          this.el.addEventListener("draw-ready", this.ready.bind(this));
-          this.el.addEventListener("draw-render", this.render.bind(this));
-          this.el.addEventListener("click", () => {
-            console.log(this.togglePlayback);
-          });
+          if (this.el.getAttribute("material").shader === "draw") {
+            const { shader } = this.el.components.material;
+            this.togglePlayback = () => shader.togglePlayback();
+            this.el.addEventListener("draw-render", this.render);
+            this.el.addEventListener("click", this.togglePlayback);
+          }
         },
-        ready({ detail: { play, pause, togglePlayback, paused } }) {
-          this.play = play;
-          this.pause = pause;
-          this.togglePlayback = togglePlayback;
-          this.paused = paused;
+        remove() {
+          this.el.removeEventListener("draw-render", this.render);
+          this.el.removeEventListener("click", this.togglePlayback);
         },
-        play() {},
-        pause() {},
-        togglePlayback() {},
-        paused() {},
         render({
           detail: {
             canvas: { width, height },
@@ -56,8 +51,8 @@
       <a-torus
         position="0 1.5 -5"
         animation="property: rotation; to: 360 360 360; dur: 20000; easing: linear; loop: true"
-        material="shader:draw;width:512;height:512;fps:15;opacity:.8;"
-        noise=""
+        material="shader:draw;width:512;height:512;opacity:.8;"
+        noise
         cursor
       >
       </a-torus>
