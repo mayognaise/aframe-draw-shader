@@ -18,7 +18,6 @@
        * Noise component example
        */
       AFRAME.registerComponent("noise", {
-        dependencies: [],
         init(event) {
           if (!this.isDrawShader()) return;
           this.el.addEventListener("draw-render", this.render);

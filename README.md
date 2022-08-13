@@ -2,53 +2,41 @@
 
 A shader to draw canvas [A-Frame](https://aframe.io) VR. Inspired by [@maxkrieger](https://github.com/maxkrieger)'s [`draw`](https://github.com/maxkrieger/aframe-draw-component) component.
 
-**[DEMO](https://mayognaise.github.io/aframe-draw-shader/basic/index.html)**
+**[DEMO](https://mayognaise.github.io/aframe-draw-shader)**
 
 ![example](example.gif)
-
 
 ## Properties
 
 - Basic `material`'s properties are supported.
 - The property is pretty much same as `flat` shader besides `repeat`.
 
-| Property | Description | Default Value |
-| -------- | ----------- | ------------- |
-| width | canvas width | 256 |
-| height | canvas height | 256 |
-| fps | fps to render | 60 |
+| Property | Description   | Default Value           |
+| -------- | ------------- | ----------------------- |
+| width    | canvas width  | 256                     |
+| height   | canvas height | 256                     |
+| fps      | fps to render | null (render each tick) |
 
 For refference, please check the following links:
+
 - [Material](https://aframe.io/docs/components/material.html)
 - [Flat Shading Model](https://aframe.io/docs/core/shaders.html#Flat-Shading-Model)
 
-
-
 ## Events
 
-- **`draw-render`** is called every framerate (fps). 
+- **`draw-render`** is called every framerate (fps).
 
-`event.detail` includes canvas's `ctx` (context) and `texture`.
-`texture.needsUpdate = true` *won't be called in the shader*.
-Please do `texture.needsUpdate = true` by yourself.
+`event.detail` includes `canvas`, context `ctx` and `texture`.
 
 ```js
-
-this.el.addEventListener('draw-render', function(event) {
-
+this.el.addEventListener("draw-render", function (event) {
   // draw!
-  var ctx = event.detail.ctx
-  var texture = event.detail.texture
+  const ctx = event.detail.ctx;
 
   // drawing...
-  ctx.rect(20,20,150,100)
-  ctx.stroke()
-
-  // texture upate
-  texture.needsUpdate = true
-
-})
-
+  ctx.rect(20, 20, 150, 100);
+  ctx.stroke();
+});
 ```
 
 ## Usage
@@ -60,44 +48,52 @@ Install and use by directly including the [browser files](dist):
 ```html
 <head>
   <title>My A-Frame Scene</title>
-  <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
-  <script src="https://rawgit.com/mayognaise/aframe-draw-shader/master/dist/aframe-draw-shader.min.js"></script>
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://rawgit.com/mayognaise/aframe-draw-shader/master/dist/aframe-draw-shader.js"></script>
   <script>
     /**
-     * noise component example
+     * Noise component example
      */
-    AFRAME.registerComponent('noise', {
-      dependencies: [ ],
-      schema: { },
-      init () {
-        this.el.addEventListener('draw-render', this.render.bind(this))
+    AFRAME.registerComponent("noise", {
+      init(event) {
+        if (!this.isDrawShader()) return;
+        this.el.addEventListener("draw-render", this.render);
       },
-      update () { },
-      remove () { },
-      pause () { },
-      play () { },
-      render (e) {
-        var ctx = e.detail.ctx,
-            texture = e.detail.texture,
-            w = ctx.canvas.width,
-            h = ctx.canvas.height,
-            idata = ctx.createImageData(w, h),
-            buffer32 = new Uint32Array(idata.data.buffer),
-            len = buffer32.length,
-            i = 0
-        for(; i < len;)
-            buffer32[i++] = ((255 * Math.random())|0) << 24
-        ctx.putImageData(idata, 0, 0)
-        // texture upate
-        texture.needsUpdate = true
-      }
-    })
+      remove() {
+        this.el.removeEventListener("draw-render", this.render);
+      },
+      render({
+        detail: {
+          canvas: { width, height },
+          ctx,
+          texture,
+        },
+      }) {
+        const idata = ctx.createImageData(width, height);
+        const buffer32 = new Uint32Array(idata.data.buffer);
+        buffer32.forEach((_, index) => {
+          buffer32[index] = ((255 * Math.random()) | 0) << 24;
+        });
+        ctx.putImageData(idata, 0, 0);
+      },
+      isDrawShader() {
+        return this.el.getAttribute("material").shader === "draw";
+      },
+    });
   </script>
 </head>
 
 <body>
   <a-scene>
-    <a-entity geometry="primitive:box;" material="shader:draw;" noise=""></a-entity>
+    <a-torus
+      id="torus"
+      position="0 1.5 -5"
+      animation="property: rotation; to: 360 360 360; dur: 20000; easing: linear; loop: true"
+      material="shader:draw;fps:30;opacity:.8;"
+      noise
+    >
+    </a-torus>
+    <a-sky color="dodgerblue"></a-sky>
   </a-scene>
 </body>
 ```
@@ -107,15 +103,12 @@ Install and use by directly including the [browser files](dist):
 Install via NPM:
 
 ```bash
-npm i -D aframe-draw-shader
+npm i aframe-draw-shader
 ```
 
 Then register and use.
 
 ```js
-import 'aframe'
-import 'aframe-draw-shader'
+import "aframe";
+import "aframe-draw-shader";
 ```
-
-
-
