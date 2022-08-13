@@ -6,9 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack serve --open --config webpack.dev.js",
-    "ghpages": "npm run preghpages && ghpages -p gh-pages",
     "postpublish": "npm run build",
-    "preghpages": "rm -rf gh-pages && cp -r dist gh-pages",
     "start": "serve dist/"
   },
   "repository": {
