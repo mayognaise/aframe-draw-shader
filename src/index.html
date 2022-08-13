@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>A-Frame Draw Shader</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.17"></script>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <h1>A-Frame Draw Shader</h1>
+    <script type="text/javascript">
+      /**
+       * Noise component example
+       */
+      AFRAME.registerComponent("noise", {
+        dependencies: [],
+        init(event) {
+          if (!this.isDrawShader()) return;
+          this.el.addEventListener("draw-render", this.render);
+        },
+        remove() {
+          this.el.removeEventListener("draw-render", this.render);
+        },
+        render({
+          detail: {
+            canvas: { width, height },
+            ctx,
+            texture,
+          },
+        }) {
+          const idata = ctx.createImageData(width, height);
+          const buffer32 = new Uint32Array(idata.data.buffer);
+          buffer32.forEach((_, index) => {
+            buffer32[index] = ((255 * Math.random()) | 0) << 24;
+          });
+          ctx.putImageData(idata, 0, 0);
+        },
+        isDrawShader() {
+          return this.el.getAttribute("material").shader === "draw";
+        },
+      });
+      /**
+       * GUI
+       */
+      const gui = new lil.GUI();
+      const obj = {
+        play: true,
+        fps: 30,
+        width: 256,
+        height: 256,
+        opacity: 0.8,
+      };
+      gui.add(obj, "play");
+      gui.add(obj, "fps", 0, 100);
+      gui.add(obj, "opacity", 0, 1);
+      gui.onChange(({ object, property, value }) => {
+        const torus = document.getElementById("torus");
+        if (!torus) return;
+        if (property === "opacity") {
+          torus.setAttribute(property, value);
+        } else {
+          const { shader } = torus.components.material;
+          if (property === "play") {
+            if (value) {
+              shader.play();
+            } else {
+              shader.pause();
+            }
+          } else {
+            torus.components.material.shader.update(object);
+          }
+        }
+      });
+    </script>
+    <a-scene>
+      <a-torus
+        id="torus"
+        position="0 1.5 -5"
+        animation="property: rotation; to: 360 360 360; dur: 20000; easing: linear; loop: true"
+        material="shader:draw;fps:30;opacity:.8;"
+        noise
+      >
+      </a-torus>
+      <a-sky color="dodgerblue"></a-sky>
+    </a-scene>
+
+    <div class="github-fork-ribbon-wrapper left">
+      <div class="github-fork-ribbon" style="background: transparent">
+        <a href="https://github.com/mayognaise/aframe-draw-shader">
+          Fork me on GitHub
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
