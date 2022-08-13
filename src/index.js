@@ -81,6 +81,7 @@ AFRAME.registerShader("draw", {
   update(schema) {
     this._updateMaterial(schema);
     this._updateTexture(schema);
+    this._setFps(schema);
     return this.material;
   },
 
